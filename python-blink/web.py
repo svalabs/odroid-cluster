@@ -1,8 +1,9 @@
 #!flask/bin/python
 import serial
+import binascii
 from flask import request, abort, Flask
 
-ser = serial.Serial('/dev/ttyACM0')  # open serial port
+ser = serial.Serial('/dev/ttyACM0', write_timeout=1.0)  # open serial port
 app = Flask(__name__)
 
 print(ser.name)  # check which port was really used
@@ -20,19 +21,25 @@ def blink():
         # Parse as int
         values = list(map(lambda x: int(x, 10), values))
     except ValueError:
+	print("bad ints")
         abort(400)  # Bad request
         return
 
     if values[0] < 0 or values[0] > 5:
+	print("invalid led")
         abort(400)  # Bad request
         return
 
-    if not all([0 < x < 255 for x in values[1:]]):
+    if not all([0 <= x <= 255 for x in values[1:]]):
         abort(400)
         return
 
-    ser.write(bytes(values))
-
+    # print(len(bytearray(values)))
+    # ser.write(bytearray(values))
+    ser.write(bytearray(values))
+    # print("sent")
+    print(binascii.hexlify(bytearray(values)))
+    # ser.flush()
     return 'ok', 200
 
 
