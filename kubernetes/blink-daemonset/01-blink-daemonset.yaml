@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: blink
+spec:
+  selector:
+      matchLabels:
+        name: blink
+  template:
+    metadata:
+      labels:
+        name: blink
+    spec:
+      containers:
+      - image: ebartzsva/odroid-blink:latest
+        name: blink
+        ports:
+        - containerPort: 5000
+          name: blink
+        securityContext:
+          privileged: true
