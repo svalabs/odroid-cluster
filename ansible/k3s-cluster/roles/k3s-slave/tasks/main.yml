@@ -1,0 +1,23 @@
+---
+
+- name: create k3s directory
+  file:
+    path: /etc/rancher/k3s/ 
+    state: directory
+
+- name: create image directory
+  file:
+    path: /var/lib/rancher/k3s/agent/images/
+    state: directory
+
+- name: create k3s registies.yaml
+  file:
+    path: /etc/rancher/k3s/registries.yaml
+    src: /mnt/nfs/k3s/registries.yaml
+
+- name: extract image tar
+  unarchive:
+    src: /mnt/nfs/k3s/k3s-airgap-images-arm.tar.gz
+    dest: /var/lib/rancher/k3s/agent/images/
+
+

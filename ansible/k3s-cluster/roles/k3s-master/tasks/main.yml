@@ -1,0 +1,12 @@
+---
+- name: install k3s master
+  shell: INSTALL_K3S_SKIP_DOWNLOAD=true /mnt/nfs/k3s/install.sh
+  args:
+    creates: /etc/rancher/k3s/k3s.yaml
+
+- name: get cluster token
+  shell: 'cat /var/lib/rancher/k3s/server/node-token'
+  register: cluster_token
+
+- name: set cluster_token fact
+  set_fact: cluster_token={{ cluster_token.stdout }}

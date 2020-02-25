@@ -1,0 +1,2 @@
+#!/bin/bash
+echo "{\"k3s_stack_id\" : \"$(hostname -f | cut -d- -f2)\"}"

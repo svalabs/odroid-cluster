@@ -1,0 +1,31 @@
+---
+- name: Install basic packages
+  apt:
+    pkg:
+    - vim
+    - nfs-common
+
+- name: Create custom fact directory
+  file:
+    path: "/etc/ansible/facts.d"
+    state: "directory"
+
+- name: create nfs mount dir
+  file:
+    path: /mnt/nfs
+    state: directory
+    mode: '0755'
+
+- name: mount central nfs
+  mount:
+    path: /mnt/nfs
+    src: 10.198.0.1:/data/nfs
+    fstype: nfs
+    state: mounted
+
+- name: Set authorized key enrico
+  authorized_key:
+    user: root
+    state: present
+    key: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC56k1q+IP4TWuVIvwcB9nrchBx+6h+JRf5PuoujiKhw34OsFbgeQ3fgKkyBYY40VkNvyz5hlFLj+bCPWLv1RBFXWb6Rp3RTcLeayBMiIMTkIMC3lMsPUx/+ZrQE8Q0XXLQJNaQP8+baQ50CykX9y1TJnJ0BZNaxCIXXSiv03IoY+hCOubsOG9GEBKZ/TqbQbcRBiaNF+HIjVIonWlwIQVP8gGFgzzkH6BLfZCcbV2HLfVRit+WQ0wsArz0gzf/+KL4QPBueWpAwG6ShXkjumxSUenfQ1HAW/DxwTTkK+qQrClslRNpph6QieADKqlWqEp3k4LfKWBSmJjh/AG51qeT enricobartz'
+

@@ -1,0 +1,9 @@
+---
+- import_playbook: python.yml
+- import_playbook: common.yml
+- import_playbook: ssl-certs.yml
+- import_playbook: robot.yml
+- import_playbook: ipa-client.yml
+- import_playbook: backup.yml
+- import_playbook: gogs.yml
+- import_playbook: webserver.yml

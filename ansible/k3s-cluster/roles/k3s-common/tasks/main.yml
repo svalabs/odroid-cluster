@@ -1,0 +1,36 @@
+---
+
+- name: Insert custom fact file for fqdn
+  copy:
+    src: facts/k3s_stack_id
+    dest: /etc/ansible/facts.d/k3s_stack_id.fact
+    mode: 0755
+    force: yes
+
+- name: create k3s directory
+  file:
+    path: /etc/rancher/k3s/ 
+    state: directory
+
+- name: create image directory
+  file:
+    path: /var/lib/rancher/k3s/agent/images/
+    state: directory
+
+- name: create k3s registies.yaml
+  copy:
+    src: /data/nfs/k3s/registries.yaml
+    dest: /etc/rancher/k3s/registries.yaml
+
+- name: extract k3s images
+  shell: gunzip -c /mnt/nfs/k3s/k3s-airgap-images-arm.tar.gz > /var/lib/rancher/k3s/agent/images/k3s-airgap-images-arm.tar
+  args:
+    creates: /var/lib/rancher/k3s/agent/images/k3s-airgap-images-arm.tar
+
+- name: copy k3s binary
+  copy:
+    src: /mnt/nfs/k3s/k3s-armhf
+    dest: /usr/local/bin/k3s
+    mode: '0755'
+    force: no
+    remote_src: yes

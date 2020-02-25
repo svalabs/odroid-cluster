@@ -1,0 +1,5 @@
+ipa_server: 'ipa01'
+domain_name: 'mrel.de'
+realm_name: 'MREL.DE'
+ipa_admin_password: 'FyKTkGCApZswfxrmUqEFFVGGPqHRhCqeUjHFMsmvHmQwL9NZP1'
+ipa_server_ip: '195.201.40.93'
