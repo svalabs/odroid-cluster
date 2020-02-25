@@ -17,5 +17,6 @@ spec:
         ports:
         - containerPort: 5000
           name: blink
+          hostPort: 5000
         securityContext:
           privileged: true
