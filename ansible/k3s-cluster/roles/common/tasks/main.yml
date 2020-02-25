@@ -10,6 +10,13 @@
     path: "/etc/ansible/facts.d"
     state: "directory"
 
+- name: create attiny reset script
+  copy:
+    src:   "attiny-reset.sh"
+    dest:  "/usr/local/bin/attiny-reset.sh"
+    mode:  0755
+    force: yes
+
 - name: mount central nfs
   mount:
     path: /mnt/nfs
