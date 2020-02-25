@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - common
+- hosts: all
+  tasks:
+    - name: reinstall ubuntu image
+      shell: "xz -d < /mnt/nfs/ubuntu-18.04.3-4.14-minimal-odroid-xu4-20190910.img.xz - | dd of=/dev/mmcblk1 bs=1M && echo b > /proc/sysrq-trigger"
+      ignore_errors: yes

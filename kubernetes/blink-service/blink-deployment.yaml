@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: blink
+  name: blink
+  namespace: blink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blink
+  template:
+    metadata:
+      labels:
+        app: blink
+    spec:
+      containers:
+      - image: ebartzsva/odroid-blink:latest
+        name: blink
+        ports:
+        - containerPort: 5000
+          name: blink
+        securityContext:
+          privileged: true

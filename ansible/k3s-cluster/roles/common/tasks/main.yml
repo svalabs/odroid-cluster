@@ -10,12 +10,6 @@
     path: "/etc/ansible/facts.d"
     state: "directory"
 
-- name: create nfs mount dir
-  file:
-    path: /mnt/nfs
-    state: directory
-    mode: '0755'
-
 - name: mount central nfs
   mount:
     path: /mnt/nfs
