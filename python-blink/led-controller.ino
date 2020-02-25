@@ -1,55 +1,60 @@
+#include <DigiCDC.h>
 #include <Adafruit_NeoPixel.h>
 
-// Which pin on the Arduino is connected to the NeoPixels?
-#define PIN1            3 
-#define PIN2            6
+// define pixels ans pins
+#define PIN1            2
+#define PIN2            0
 #define NUMPIXELS       3
-// How many NeoPixels are attached to the Arduino?
-
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, PIN1, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel pixels1 = Adafruit_NeoPixel(NUMPIXELS, PIN2, NEO_GRB + NEO_KHZ800);
 
+int skip = 0;
+
 void setup() {
-// initialize serial
-Serial.begin(9600);
-// This initializes the NeoPixel library.
-pixels.begin(); 
-pixels1.begin(); 
+  // initialize the digital pin as an output.
+  SerialUSB.begin();
+  
+  pixels.begin();
+  pixels1.begin();
+  pinMode(1, OUTPUT);
 }
 
+
+// the loop routine runs over and over again forever:
 void loop() {
+  if (SerialUSB.available() && skip < 3) {
+    skip++;
+    SerialUSB.read();
+  }
+  if (SerialUSB.available() >= 4) {
+  
+    
+    uint8_t buffer[4]{};
 
-// For a set of NeoPixels the first NeoPixel is 0, second is 1, all the way up to the count of pixels minus one.
-// if there's any serial available, read it:
-  while (Serial.available() > 0) {
-
-    // look for the next valid integer in the incoming serial stream:
-    int pos = Serial.parseInt();
-    int red = Serial.parseInt();
-    // do it again:
-    int green = Serial.parseInt();
-    // do it again:
-    int blue = Serial.parseInt();
-
-    // look for the newline. That's the end of your sentence:
-    if (Serial.read() == '\n') {
-      pos = constrain(pos, 0, 5);
-      red = constrain(red, 0, 255);
-      green = constrain(green, 0, 255);
-      blue = constrain(blue, 0, 255);
-
-      if (pos < 3){
-        // pixels.Color takes RGB values, from 0,0,0 up to 255,255,255
-        pixels.setPixelColor(pos, pixels.Color(red,green,blue));
-        pixels.show(); // This sends the updated pixel color to the hardware.
-        Serial.print(pos);
-      } else {
-        pos = pos - 3;
-        pixels1.setPixelColor(pos, pixels1.Color(red,green,blue));
-        pixels1.show(); // This sends the updated pixel color to the hardware.
-        Serial.print(pos);
-      }
-
-      }
+    for(int i = 0; i < 4; i++) {
+      buffer[i] = SerialUSB.read();
+      SerialUSB.write(buffer[i]);
     }
+    
+    uint8_t position = buffer[0];
+
+    if(position >= 6) {
+      SerialUSB.write(" X");
+      SerialUSB.write(position);
+      SerialUSB.refresh();
+      return;
+    }
+
+    const char buf[] = "012345";
+    const char pos = buf[position];
+    if(position < 3) {
+      pixels.setPixelColor(position, pixels.Color(buffer[1], buffer[2], buffer[3]));    
+      pixels.show(); // This sends the updated pixel color to the hardware.
+    } else {
+      position -= 3;
+      pixels1.setPixelColor(position, pixels1.Color(buffer[1], buffer[2], buffer[3]));    
+      pixels1.show();
+    }
+  }
+  SerialUSB.refresh();
 }
