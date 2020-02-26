@@ -4,6 +4,18 @@
   args:
     creates: /etc/rancher/k3s/k3s.yaml
 
+- name: replace 127.0.0.1 with hostname in k3s.yaml
+  replace:
+    path: /etc/rancher/k3s/k3s.yaml
+    regexp: '127.0.0.1'
+    replace: "{{ansible_host}}"
+    backup: yes
+
+- name: fetch k3s cluster yaml to NFS
+  fetch:
+    src: /etc/rancher/k3s/k3s.yaml
+    dest: "/data/k3s/{{ansible_host}}.yaml"
+
 - name: get cluster token
   shell: 'cat /var/lib/rancher/k3s/server/node-token'
   register: cluster_token

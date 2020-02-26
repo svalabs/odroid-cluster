@@ -11,3 +11,5 @@
   tasks:
     - name: join the cluster
       shell: "INSTALL_K3S_SKIP_DOWNLOAD=true K3S_URL=https://mc1-{{ansible_local.k3s_stack_id.k3s_stack_id}}-1.sva.local:6443 K3S_TOKEN={{ hostvars['mc1-' + ansible_local.k3s_stack_id.k3s_stack_id + '-1.sva.local']['cluster_token'] }} /mnt/nfs/k3s/install.sh"
+      args:
+        creates: /etc/rancher/node/password
