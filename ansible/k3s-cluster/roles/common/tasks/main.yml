@@ -3,6 +3,7 @@
   apt:
     pkg:
     - vim
+    - curl
     - nfs-common
 
 - name: Create custom fact directory
