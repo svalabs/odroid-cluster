@@ -6,7 +6,7 @@ do
   do
     for led in {0..5}
     do
-      curl --connect-timeout 1 --silent http://mc1-${stack}-${node}:5000/blink?value=${led}.0.0.255 > /dev/null
+      curl --connect-timeout 1 --silent http://mc1-${stack}-${node}:5000/blink?value=${led}.0.255.0 > /dev/null
     done
   done
 done

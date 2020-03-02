@@ -4,6 +4,7 @@
     pkg:
     - vim
     - curl
+    - stress
     - nfs-common
 
 - name: Create custom fact directory
