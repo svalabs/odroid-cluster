@@ -19,6 +19,13 @@
     mode:  0755
     force: yes
 
+- name: create odroid temperature script
+  copy:
+    src:   "odroid-temperature.sh"
+    dest:  "/usr/local/bin/odroid-temperature.sh"
+    mode:  0755
+    force: yes
+
 - name: mount central nfs
   mount:
     path: /mnt/nfs
